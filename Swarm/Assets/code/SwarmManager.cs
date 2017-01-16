@@ -11,6 +11,11 @@ public class SwarmManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		swarmList = new ArrayList ();
+		swarmList.Add (GameObject.Find("sphere0"));
+		swarmList.Add (GameObject.Find("sphere1"));
+		swarmList.Add (GameObject.Find("sphere2"));
+		swarmList.Add (GameObject.Find("sphere3"));
+
 	}
 
 	void removeMember(SwarmMember member)
