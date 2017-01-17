@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwarmMember : MonoBehaviour {
 
-	private Vector3 thrust;
+	private float thrust = 9.8f;
 	private Rigidbody rb;
 	private int verticalDistance;
 	private ArrayList closestMembers;
@@ -13,6 +13,7 @@ public class SwarmMember : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
+		rb.useGravity = true;
 	}
 	
 	// Update is called once per frame
@@ -31,7 +32,6 @@ public class SwarmMember : MonoBehaviour {
 
 	void maintainFlight()
 	{
-		rb.velocity = Vector3.zero;
-		rb.AddForce (new Vector3 (1, 1));
+		rb.AddForce(0,thrust,0, ForceMode.Force);
 	}
 }
