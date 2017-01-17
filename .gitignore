@@ -1,5 +1,6 @@
-/Library/
-/Temp/
+Swarm/Library/
+Swarm/Temp/
+Swarm/ProjectSettings/
 /Obj/
 /Build/
 /Builds/
