@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SwarmMember : MonoBehaviour {
 
-	private float thrust = 9.6f;
+	private float gravity = 9.8f;
+	private Vector3 thrustVector;
 	private Rigidbody rb;
 	private int verticalDistance;
 	private float idealNeightorDistance = 100f;
@@ -19,14 +20,20 @@ public class SwarmMember : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = true;
+		thrustVector.y = gravity;
+	}
+
+	void onFixedUpdate() {
+		
+		changeVector ();
+		maintainFlight ();
 	}
 
 	// Update is called once per frame
 	void Update () {
-		
-		changeVector ();
-		maintainFlight ();
 
+		// stay up
+		rb.AddForce(0,thrustVector.y,0, ForceMode.Force);
 	}
 
 	public void addClostestMember(SwarmMember newMember)
@@ -39,17 +46,28 @@ public class SwarmMember : MonoBehaviour {
 	{
 
 	}
-
+	//TODO changing this to method that alters the trajectory for triangulation
 	bool isWithinDistanceThreshold(SwarmMember member)
 	{
-		//Vector3.Distance(rb.position, closestMember0.rb.position
+		Vector3 direction = (member.rb.position - rb.position).normalized;
+		if (Vector3.Distance (rb.position, member.rb.position) < idealNeightorDistance - idealNeighborDistanceThreshold) {
+
+			thrustVector = transform.position + direction
+			//rigidbody.MovePosition(transform.position + direction * movementSpeed * Time.deltaTime);
+			//return false;
+		}
+		if (Vector3.Distance (rb.position, member.rb.position) > idealNeightorDistance + idealNeighborDistanceThreshold) {
+			return false;
+		}
+
+		return true;
 	}
 
-	// Stay equal distance from the closest 2 members and stay in the air.
-	void maintainFlight()
+	// Stay equal distance from the closest 2 members.
+	void assignLocalTrajectory()
 	{
 		// Check distnace between this and the first RigidBody
-		if(isWithinDistanceThreshold(closestMember0))
+		if(!isWithinDistanceThreshold(closestMember0))
 		{
 
 		}
@@ -60,7 +78,6 @@ public class SwarmMember : MonoBehaviour {
 
 		}
 
-		// stay up
-		rb.AddForce(0,thrust,0, ForceMode.Force);
+
 	}
 }
