@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SwarmMember : MonoBehaviour {
 
-	private float thrust = 9.7f;
+	private float thrust = 9.6f;
 	private Rigidbody rb;
 	private int verticalDistance;
 	private ArrayList closestMembers;
