@@ -49,7 +49,7 @@ public class SwarmMember : MonoBehaviour {
 	void Update () {
 
 		// move
-		rb.AddForce(thrustVector.x, thrustVector.y, thrustVector.z, ForceMode.Force);
+		rb.AddForce(thrustVector.x, 0, thrustVector.z, ForceMode.Force);
 	}
 
 	// Gets called from SwarmManager
@@ -58,13 +58,16 @@ public class SwarmMember : MonoBehaviour {
 		idealNeightorDistance = value;
 	}
 
+	// Figure out which neighbor needs to be replaced
 	public void addClosestMember(SwarmMember member)
 	{
-		if(Vector3.Distance (rb.position, member.rb.position))
-		{
-			
-		}
+		float newMemberDistance = Vector3.Distance (rb.position, member.rb.position);
+		if (Vector3.Distance (rb.position, closestMember0.rb.position) < newMemberDistance) {
+			closestMember1 = member;
+		} else {
+			closestMember0 = member;
 
+		}
 
 	}
 
@@ -74,6 +77,10 @@ public class SwarmMember : MonoBehaviour {
 		
 	}
 
+	/**
+	 * 
+	 * 
+	 */
 	Vector3 setVector(SwarmMember member)
 	{
 		Vector3 direction = (member.rb.position - rb.position).normalized;
@@ -85,7 +92,7 @@ public class SwarmMember : MonoBehaviour {
 		}
 		if (Vector3.Distance (rb.position, member.rb.position) > idealNeightorDistance + idealNeighborDistanceThreshold) {
 
-			newDirection = transform.position - direction
+			newDirection = transform.position - direction;
 				
 		}
 
