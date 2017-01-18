@@ -1,8 +1,10 @@
 ﻿/**
  * This class is the instance of drone that provides lift to a central object.
  * Each SwarmMember keeps track of the 2 closest members and maintains a predefined distance between it and them.
+ * The above functionality creates persistant triangles between members.
  * The onFixedUpdate method triggers the calculations that arrange groups into triangles.
  * The triangles are the basis of the grid that the SwarmMembers take as time progresses.  
+ * This class calculates a new vector for itself each frame based on input from neightbors and manager.
  * The distance between them depends on the total number of members and is controlled globally.
  * 
  */
@@ -24,7 +26,7 @@ public class SwarmMember : MonoBehaviour {
 	// This provides padding for distance between neighbors.
 	private float idealNeighborDistanceThreshold = 5f;
 
-	// Each Member constantly triangulates with its closest 2 Members.
+	// Each Member constantly triangulates with its closest 2 Members(neighbors).
 	private SwarmMember closestMember0;
 	private SwarmMember closestMember1;
 
@@ -34,12 +36,14 @@ public class SwarmMember : MonoBehaviour {
 	private Vector3 globalThrustVector;
 
 	void Start () {
+		
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = true;
 		thrustVector.y = gravity;
 	}
 
 	void onFixedUpdate() {
+		
 		assignLocalTrajectory ();
 		updateGlobalVector ();
 	}
@@ -48,16 +52,19 @@ public class SwarmMember : MonoBehaviour {
 	void Update () {
 
 		// Add local thrust
-		thrustVector = (localThrustVector0 + localThrustVector1).normalized;
+		thrustVector = (thrustVector + localThrustVector0).normalized;
+		thrustVector = (thrustVector + localThrustVector1).normalized;
 
-		// add global thrust
-		thrustVector = (thrustVector + globalThrustVector).normalized;
+		//TODO add gravity or anti-gravity thrust here?
 
 		// move
 		rb.AddForce(thrustVector.x, thrustVector.y, thrustVector.z, ForceMode.Force);
 	}
 
-	// Gets called from SwarmManager
+	/** 
+	 * Gets called from SwarmManager
+	 * 
+	 */
 	void updateIdealNeighborDistance(float value)
 	{
 		idealNeightorDistance = value;
@@ -69,13 +76,12 @@ public class SwarmMember : MonoBehaviour {
 	public void addClosestMember(SwarmMember member)
 	{
 		float newMemberDistance = Vector3.Distance (rb.position, member.rb.position);
+
 		if (Vector3.Distance (rb.position, closestMember0.rb.position) < newMemberDistance) {
 			closestMember1 = member;
 		} else {
 			closestMember0 = member;
-
 		}
-
 	}
 
 	/**
@@ -83,7 +89,7 @@ public class SwarmMember : MonoBehaviour {
 	 */
 	public void transmitGlobalVector(Vector3 vector) 
 	{
-
+		globalThrustVector = vector;
 	}
 
 	/** 
@@ -92,7 +98,8 @@ public class SwarmMember : MonoBehaviour {
 	 */
 	void updateGlobalVector()
 	{
-		
+		// add global thrust
+		thrustVector = (thrustVector + globalThrustVector).normalized;
 	}
 
 	/**

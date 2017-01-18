@@ -2,6 +2,7 @@
  * This is a Swarming algorithm that controls virtual drones that carry a camera.
  * The drones are classed as SwarmMember.
  * This manager class adds and removes members and provides any global values into the greater algorithm.
+ * The manager class tells each member where the central object wants to go and the swarm decides how to orient.
  * 
  */
 
