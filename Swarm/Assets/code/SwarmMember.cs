@@ -47,8 +47,14 @@ public class SwarmMember : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		// Add local thrust
+		thrustVector = (localThrustVector0 + localThrustVector1).normalized;
+
+		// add global thrust
+		thrustVector = (thrustVector + globalThrustVector).normalized;
+
 		// move
-		rb.AddForce(thrustVector.x, 0, thrustVector.z, ForceMode.Force);
+		rb.AddForce(thrustVector.x, thrustVector.y, thrustVector.z, ForceMode.Force);
 	}
 
 	// Gets called from SwarmManager
