@@ -19,7 +19,11 @@ public class SwarmMember : MonoBehaviour {
 	private Vector3 thrustVector;
 	private Rigidbody rb;
 	private int verticalDistance;
+
+	// This is the intial value for how much distance between neighbors but gets updated by the manager class if more members are added.
 	private float idealNeightorDistance = 100f;
+
+	// This provides padding for distance between neighbors.
 	private float idealNeighborDistanceThreshold = 5f;
 
 	// Each Member constantly triangulates with its closest 2 Members.
