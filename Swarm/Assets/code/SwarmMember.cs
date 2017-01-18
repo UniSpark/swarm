@@ -113,11 +113,11 @@ public class SwarmMember : MonoBehaviour {
 
 		if (Vector3.Distance (rb.position, member.rb.position) < idealNeightorDistance - idealNeighborDistanceThreshold) {
 
-			newDirection = transform.position + direction;
+			newDirection = member.rb.position + direction;
 		}
 		if (Vector3.Distance (rb.position, member.rb.position) > idealNeightorDistance + idealNeighborDistanceThreshold) {
 
-			newDirection = transform.position - direction;
+			newDirection = member.rb.position - direction;
 				
 		}
 
