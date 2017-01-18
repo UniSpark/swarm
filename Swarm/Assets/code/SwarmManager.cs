@@ -1,4 +1,11 @@
-﻿using System.Collections;
+﻿/**
+ * This is a Swarming algorithm that controls virtual drones that carry a camera.
+ * The drones are classed as SwarmMember.
+ * This manager class adds and removes members and provides any global values into the greater algorithm.
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 

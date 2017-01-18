@@ -1,4 +1,15 @@
-﻿using System.Collections;
+﻿/**
+ * This class is the instance of drone that provides lift to a central object.
+ * Each SwarmMember keeps track of the 2 closest members and maintains a predefined distance between it and them.
+ * The onFixedUpdate method triggers the calculations that arrange groups into triangles.
+ * The triangles are the basis of the grid that the SwarmMembers take as time progresses.  
+ * The distance between them depends on the total number of members and is controlled globally.
+ * 
+ * 
+ * 
+ */
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,6 +26,8 @@ public class SwarmMember : MonoBehaviour {
 	private SwarmMember closestMember0;
 	private SwarmMember closestMember1;
 
+	private Vector3 localThrustVector0;
+	private Vector3 localThrustVector1;
 
 	// Use this for initialization
 	void Start () {
@@ -24,60 +37,61 @@ public class SwarmMember : MonoBehaviour {
 	}
 
 	void onFixedUpdate() {
-		
-		changeVector ();
-		maintainFlight ();
+		assignLocalTrajectory ();
+		updateGlobalVector ();
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		// stay up
-		rb.AddForce(0,thrustVector.y,0, ForceMode.Force);
+		// move
+		rb.AddForce(thrustVector.x, thrustVector.y, thrustVector.z, ForceMode.Force);
 	}
 
-	public void addClostestMember(SwarmMember newMember)
+	// Gets called from SwarmManager
+	void updateIdealNeighborDistance(float value)
 	{
-
+		idealNeightorDistance = value;
 	}
 
-	// Alter x,y,z for this frame
-	void changeVector()
+	public void addClosestMember(SwarmMember member)
 	{
+		if(Vector3.Distance (rb.position, member.rb.position))
+		{
+			
+		}
+
 
 	}
-	//TODO changing this to method that alters the trajectory for triangulation
-	bool isWithinDistanceThreshold(SwarmMember member)
+
+	//
+	void updateGlobalVector()
+	{
+		
+	}
+
+	Vector3 setVector(SwarmMember member)
 	{
 		Vector3 direction = (member.rb.position - rb.position).normalized;
+		Vector3 newDirection;
+
 		if (Vector3.Distance (rb.position, member.rb.position) < idealNeightorDistance - idealNeighborDistanceThreshold) {
 
-			thrustVector = transform.position + direction
-			//rigidbody.MovePosition(transform.position + direction * movementSpeed * Time.deltaTime);
-			//return false;
+			newDirection = transform.position + direction;
 		}
 		if (Vector3.Distance (rb.position, member.rb.position) > idealNeightorDistance + idealNeighborDistanceThreshold) {
-			return false;
+
+			newDirection = transform.position - direction
+				
 		}
 
-		return true;
+		return newDirection;
 	}
 
 	// Stay equal distance from the closest 2 members.
 	void assignLocalTrajectory()
 	{
-		// Check distnace between this and the first RigidBody
-		if(!isWithinDistanceThreshold(closestMember0))
-		{
-
-		}
-
-		// Check distnace between this and the second RigidBody
-		if(isWithinDistanceThreshold(closestMember1))
-		{
-
-		}
-
-
+		localThrustVector0 = setVector (closestMember0);
+		localThrustVector1 = setVector (closestMember1);
 	}
 }
