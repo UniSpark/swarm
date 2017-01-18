@@ -16,6 +16,8 @@ public class SwarmManager : MonoBehaviour {
 
 	private int targetInnerDistance = 100;
 
+	private Vector3 direction;
+
 	// Use this for initialization
 	void Start () {
 		swarmList = new ArrayList ();
@@ -24,6 +26,11 @@ public class SwarmManager : MonoBehaviour {
 		swarmList.Add (GameObject.Find("sphere2"));
 		swarmList.Add (GameObject.Find("sphere3"));
 
+	}
+
+	public void setVector(Vector3 vector)
+	{
+		direction = vector;
 	}
 
 	void removeMember(SwarmMember member)
@@ -35,12 +42,15 @@ public class SwarmManager : MonoBehaviour {
 	{
 		swarmList.Add (member);
 	}
-	
+
+
+
 	// Update is called once per frame
 	void Update () {
 		for (uint i = 0; i <swarmList.Count; i++)
 		{
-			
+			SwarmMember member = (SwarmMember)swarmList [i];
+			member.transmitGlobalVector (direction);
 		}
 	}
 		
