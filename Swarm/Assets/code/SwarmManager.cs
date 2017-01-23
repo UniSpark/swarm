@@ -43,11 +43,19 @@ public class SwarmManager : MonoBehaviour {
 		swarmList.Add (member);
 	}
 
+	public void takeOff()
+	{
 
+	}
+
+	public void land()
+	{
+
+	}
 
 	// Update is called once per frame
 	void Update () {
-		for (uint i = 0; i <swarmList.Count; i++)
+		for (int i = 0; i <swarmList.Count; i++)
 		{
 			SwarmMember member = (SwarmMember)swarmList [i];
 			member.transmitGlobalVector (direction);

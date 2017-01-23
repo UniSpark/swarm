@@ -20,6 +20,8 @@ public class SwarmMember : MonoBehaviour {
 	private Rigidbody rb;
 	private int verticalDistance;
 
+	public SphereCollider sphere;
+
 	// This is the intial value for how much distance between neighbors but gets updated by the manager class if more members are added.
 	private float idealNeightorDistance = 100f;
 
@@ -30,22 +32,41 @@ public class SwarmMember : MonoBehaviour {
 	private SwarmMember closestMember0;
 	private SwarmMember closestMember1;
 
+	// Keep a reference to the distance to neighbors so if a new member is closer, they can take the slot of the existing neighbor.
+	private float closestMemberDistance0;
+	private float closestMemberDistance1;
+
+
 	// These are the data structures that add up to form the end vector for each frame
 	private Vector3 localThrustVector0;
 	private Vector3 localThrustVector1;
 	private Vector3 globalThrustVector;
 
 	void Start () {
-		
+
+		sphere = GetComponent<SphereCollider> ();
 		rb = GetComponent<Rigidbody> ();
 		rb.useGravity = true;
 		thrustVector.y = gravity;
+
 	}
 
 	void onFixedUpdate() {
 		
 		assignLocalTrajectory ();
 		updateGlobalVector ();
+	}
+
+	void OnCollisionStay(Collision collision)
+	{
+		ArrayList tempContacts;
+
+		foreach (ContactPoint contact in collision.contacts) {
+			
+			//For visual debugging
+			//Debug.DrawRay(contact.point, contact.normal * 10, Color.white);
+
+		}
 	}
 
 	// Update is called once per frame
